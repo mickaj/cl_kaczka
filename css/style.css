@@ -1,0 +1,21 @@
+﻿html, body {
+    background-color: #808080;
+    height: 98%;
+}
+
+#gameScreen {
+    background-image: url("../img/landscape.jpg");
+    background-size: cover;
+    min-height: 95%;
+    width: 80%;
+    margin: auto;
+}
+
+#duck {
+    background-color: black;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    left: 100px;
+    top: 100px;
+}
