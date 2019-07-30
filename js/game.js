@@ -11,10 +11,10 @@ function moveDuck() {
 
     var screenDiv = $('#gameScreen');
 
-    //console.log(duckDiv);
+    console.log(duckDiv);
     //console.log(screenDiv);
 
-    var timeout = setInterval(function () { duckAnimate(duckDiv, screenDiv); }, 200);
+    var timeout = setInterval(function () { duckAnimate(duckDiv, screenDiv); }, 250);
 }
 
 
@@ -25,7 +25,7 @@ function duckAnimate(duckDiv, screenDiv) {
         var animationOk = canAnimate(duckDiv, screenDiv, direction, distance);
         //if (!animationOk) console.log("movement blocked!");
     } while (!animationOk);
-    duckDiv.animate(randomAnimation(direction, distance), 10);
+    duckDiv.animate(randomAnimation(direction, distance), 200);
 
     //console.log("screen Xs: " + screenDiv.prop("offsetLeft") + "x" + screenDiv.prop("offsetWidth"));
     //console.log("screen Yx: " + screenDiv.prop("offsetTop") + "x" + screenDiv.prop("offsetHeight"));
@@ -43,8 +43,8 @@ function canAnimate(duck, screen, direction, distance) {
 
     if (duck.prop("offsetTop") + trueYdistance <= screen.prop("offsetTop")) return false;
     if (duck.prop("offsetLeft") + trueXdistance <= screen.prop("offsetLeft")) return false;
-    if (duck.prop("offsetTop") + 50 + trueYdistance >= screen.prop("offsetHeight")) return false;
-    if (duck.prop("offsetLeft") + 50 + trueXdistance >= screen.prop("offsetWidth")) return false;
+    if (duck.prop("offsetTop") + duck.prop("offsetHeight") + trueYdistance >= screen.prop("offsetHeight")) return false;
+    if (duck.prop("offsetLeft") + duck.prop("offsetWidth") + trueXdistance >= screen.prop("offsetWidth")) return false;
 
     return true;
 }
@@ -92,5 +92,5 @@ function randomDirection() {
 }
 
 function randomDistance() {
-    return Math.floor(Math.random() * 100) + 1;
+    return Math.floor(Math.random() * 150) + 1;
 }
