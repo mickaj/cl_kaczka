@@ -1,11 +1,17 @@
 ﻿document.addEventListener("DOMContentLoaded", domLoaded);
 
 function domLoaded() {
-    moveDuck();
+    var startBtn = $('#start');
+    startBtn.click(startBtnClick);    
 }
 
 function moveDuck() {
     var duckDiv = $('#duck');
+    duckDiv.css("visibility", "visible");
+    duckDiv.attr("data-energy", "100");
+
+    duckDiv.click(showExplosion);
+
     var currentX = duckDiv.offsetLeft;
     var currentY = duckDiv.offsetTop;
 
@@ -14,7 +20,9 @@ function moveDuck() {
     console.log(duckDiv);
     //console.log(screenDiv);
 
-    var timeout = setInterval(function () { duckAnimate(duckDiv, screenDiv); }, 250);
+    var timeout = setInterval(function () { duckAnimate(duckDiv, screenDiv); }, 1000);
+    duckDiv.attr("data-interval", timeout);
+    return timeout;
 }
 
 
@@ -93,4 +101,30 @@ function randomDirection() {
 
 function randomDistance() {
     return Math.floor(Math.random() * 150) + 1;
+}
+
+function showExplosion() {
+    var duckDiv = $("#duck");
+    var duckEnergy = parseInt(duckDiv.attr("data-energy")) - 5;
+    duckDiv.attr("data-energy", duckEnergy);
+
+    if (duckEnergy <= 0) { killDuck(); }
+
+    console.log("jeb!");
+    var explosionDiv = $('#explosion');
+    explosionDiv.css("visibility", "visible");
+    var timeout = setTimeout(function () {
+        explosionDiv.css("visibility", "hidden");
+    }, 200);
+}
+
+function startBtnClick() {
+    moveDuck();
+}
+
+function killDuck() {
+    var duckDiv = $("#duck");
+    duckDiv.off("click");
+    clearInterval(parseInt(duckDiv.attr("data-interval")));
+    console.log("die!");
 }

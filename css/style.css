@@ -6,9 +6,10 @@
 #gameScreen {
     background-image: url("../img/landscape.jpg");
     background-size: cover;
-    min-height: 95%;
+    min-height: 90%;
     width: 80%;
     margin: auto;
+    cursor: crosshair;
 }
 
 #duck {
@@ -19,4 +20,39 @@
     position: relative;
     left: 100px;
     top: 100px;
+    visibility: hidden;
+}
+
+#explosion {
+    background-image: url("../img/explosion.png");
+    background-size: 50px;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    left: 0px;
+    right: 0px;
+    visibility: hidden;
+}
+
+#bottomBar {
+    padding-top: 20px;
+    min-height: 10%;
+    text-align: center;
+}
+
+.btn {
+    -webkit-border-radius: 28px;
+    -moz-border-radius: 28px;
+    border-radius: 28px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 20px;
+    background: #60676b;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    border: none;
+}
+.btn:hover {
+     background: #3cb0fd;
+     text-decoration: none;
 }
