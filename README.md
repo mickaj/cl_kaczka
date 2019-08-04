@@ -7,4 +7,4 @@ Written in JS with use of jQuery.
 
 If you wish to try it out: [mkajzer.pl/ufo](https://mkajzer.pl/ufo)
 
-Uses creatives form flaticon.com and unsplash.com. For more details please visit [credits page](https://mkajzer.pl/ufo/credits.html)
+Uses creatives from flaticon.com and unsplash.com. For more details please visit [credits page](https://mkajzer.pl/ufo/credits.html)
