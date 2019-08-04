@@ -13,7 +13,7 @@ function moveDuck() {
 
     duckDiv.click(showExplosion);
 
-    var timeout = setInterval(function () { duckAnimate(); }, 1000);
+    var timeout = setInterval(function () { duckAnimate(); }, 750);
     duckDiv.attr("data-interval", timeout);
     return timeout;
 }
