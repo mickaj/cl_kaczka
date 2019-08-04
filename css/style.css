@@ -6,10 +6,38 @@
 #gameScreen {
     background-image: url("../img/landscape.jpg");
     background-size: cover;
-    min-height: 90%;
+    cursor: crosshair;
+}
+
+#credits {
+    color: black;
+    font-family: Arial;
+}
+
+div.mainScreen {
+    min-height: 85%;
     width: 80%;
     margin: auto;
-    cursor: crosshair;
+}
+
+#topBar {
+    width: 80%;
+    height: 5%;
+    margin: auto;
+    color: white;
+    font-family: Arial;
+    display: flex;
+    align-items: center;
+}
+
+span#logo {
+    font-size: 20px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+span#menu {
+    margin-left: 2rem;
 }
 
 #duck {
@@ -55,6 +83,7 @@ div.destroyed {
     vertical-align: top;
     width: 80%;
     font-weight: bold;
+    font-family: Arial;
 }
 
 .collapsedBar {
@@ -81,3 +110,18 @@ div.destroyed {
      background: #3cb0fd;
      text-decoration: none;
 }
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #3cb0fd;
+    text-decoration: underline;
+}
+
+a:visited:hover {
+    color: #3cb0fd;
+}
+

@@ -5,10 +5,21 @@
     <title>Kaczka</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <!--<script src="js/page.js" type="text/javascript"></script>-->
     <script src="js/game.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="gameScreen">
+    <div id="topBar">
+        <span id="logo">
+            <a href="index.html">UFO Shooter</a>
+        </span>
+        <span id="menu">
+            | about | 
+            <a href="credits.html">credits</a>
+            | github |
+        </span>
+    </div>
+    <div id="gameScreen" class="mainScreen">
         <div id="duck" class="notdestroyed">
             <div id="explosion"></div>
         </div>

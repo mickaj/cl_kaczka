@@ -84,7 +84,7 @@ function randomAnimation(direction, distance) {
 }
 
 function fallDownAnimation(duckDiv, screenDiv) {
-    var deltaTop = screenDiv.prop("offsetHeight") - duckDiv.prop("offsetTop") - 50;
+    var deltaTop = screenDiv.prop("offsetHeight") - duckDiv.prop("offsetTop");
     deltaTop = "+=" + deltaTop;
 
     duckDiv.animate({ 'top': deltaTop }, 200);
