@@ -1,24 +1,22 @@
 ﻿document.addEventListener("DOMContentLoaded", domLoaded);
 
 function domLoaded() {
-    var startBtn = $('#start');
+    var startBtn = $('#startBtn');
     startBtn.click(startBtnClick);    
 }
 
 function moveDuck() {
     var duckDiv = $('#duck');
+    duckDiv.removeClass("destroyed");
+    duckDiv.addClass("notdestroyed");
     duckDiv.css("visibility", "visible");
     duckDiv.attr("data-energy", "100");
 
     duckDiv.click(showExplosion);
 
-    var currentX = duckDiv.offsetLeft;
-    var currentY = duckDiv.offsetTop;
-
     var screenDiv = $('#gameScreen');
 
     console.log(duckDiv);
-    //console.log(screenDiv);
 
     var timeout = setInterval(function () { duckAnimate(duckDiv, screenDiv); }, 1000);
     duckDiv.attr("data-interval", timeout);
@@ -27,18 +25,18 @@ function moveDuck() {
 
 
 function duckAnimate(duckDiv, screenDiv) {
+    if (isDuckOutOfBounds()) {
+        console.log("out of bounds!");
+        resetPosition();
+    }
+
     do {
         var direction = randomDirection();
         var distance = randomDistance();
         var animationOk = canAnimate(duckDiv, screenDiv, direction, distance);
-        //if (!animationOk) console.log("movement blocked!");
     } while (!animationOk);
-    duckDiv.animate(randomAnimation(direction, distance), 200);
 
-    //console.log("screen Xs: " + screenDiv.prop("offsetLeft") + "x" + screenDiv.prop("offsetWidth"));
-    //console.log("screen Yx: " + screenDiv.prop("offsetTop") + "x" + screenDiv.prop("offsetHeight"));
-    //console.log("current offsetTop: " + duckDiv.prop("offsetTop"));
-    //console.log("current offsetLeft: " + duckDiv.prop("offsetLeft"));
+    duckDiv.animate(randomAnimation(direction, distance), 200);
 }
 
 function canAnimate(duck, screen, direction, distance) {
@@ -85,6 +83,13 @@ function randomAnimation(direction, distance) {
     };
 }
 
+function fallDownAnimation(duckDiv, screenDiv) {
+    var deltaTop = screenDiv.prop("offsetHeight") - duckDiv.prop("offsetTop") - 50;
+    deltaTop = "+=" + deltaTop;
+
+    duckDiv.animate({ 'top': deltaTop }, 200);
+}
+
 function randomDirection() {
     var number = Math.floor(Math.random() * 8) + 1;
     switch (number) {
@@ -108,9 +113,12 @@ function showExplosion() {
     var duckEnergy = parseInt(duckDiv.attr("data-energy")) - 5;
     duckDiv.attr("data-energy", duckEnergy);
 
+    var energyBar = $("#energyBar");
+    energyBar.css("width", duckEnergy * 0.8 + "%");
+    energyBar.text(duckEnergy + "%");
+
     if (duckEnergy <= 0) { killDuck(); }
 
-    console.log("jeb!");
     var explosionDiv = $('#explosion');
     explosionDiv.css("visibility", "visible");
     var timeout = setTimeout(function () {
@@ -119,12 +127,54 @@ function showExplosion() {
 }
 
 function startBtnClick() {
+    resetPosition();
+
+    var startButton = $("#startBtn");
+    startButton.removeClass("visibleBar");
+    startButton.addClass("collapsedBar");
+
+    var energyBar = $("#energyBar");
+    energyBar.removeClass("collapsedBar");
+    energyBar.addClass("visibleBar");
+
+    energyBar.css("width", "80%");
+    energyBar.text("100%");
+
     moveDuck();
 }
 
 function killDuck() {
     var duckDiv = $("#duck");
+    var screenDiv = $("#gameScreen");
     duckDiv.off("click");
     clearInterval(parseInt(duckDiv.attr("data-interval")));
-    console.log("die!");
+    duckDiv.removeClass("notdestroyed");
+    duckDiv.addClass("destroyed");
+    fallDownAnimation(duckDiv, screenDiv);
+
+    var startButton = $("#startBtn");
+    startButton.removeClass("collapsedBar");
+    startButton.addClass("visibleBar");
+
+    var energyBar = $("#energyBar");
+    energyBar.removeClass("visibleBar");
+    energyBar.addClass("collapsedBar");
+}
+
+function resetPosition() {
+    var duckDiv = $("#duck");
+    duckDiv.css("top", "50px");
+    duckDiv.css("left", "50px");
+}
+
+function isDuckOutOfBounds() {
+    var duck = $("#duck");
+    var screen = $("#gameScreen");
+
+    if (duck.prop("offsetTop") < screen.prop("offsetTop")) return true;
+    if (duck.prop("offsetLeft") < screen.prop("offsetLeft")) return true;
+    if (duck.prop("offsetTop") + duck.prop("offsetHeight") > screen.prop("offsetHeight")) return true;
+    if (duck.prop("offsetLeft") + duck.prop("offsetWidth") > screen.prop("offsetWidth")) return true;
+
+    return false;
 }

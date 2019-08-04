@@ -13,14 +13,22 @@
 }
 
 #duck {
-    background-image: url("../img/ufo.png");
-    background-size: 50px;
     width: 50px;
     height: 50px;
     position: relative;
     left: 100px;
     top: 100px;
     visibility: hidden;
+}
+
+div.notdestroyed {
+    background-image: url("../img/ufo.png");
+    background-size: 50px;
+}
+
+div.destroyed {
+    background-image: url("../img/ufo_destroyed.png");
+    background-size: 50px;
 }
 
 #explosion {
@@ -38,6 +46,23 @@
     padding-top: 20px;
     min-height: 10%;
     text-align: center;
+}
+
+#energyBar {
+    background-color: cornflowerblue;
+    position: relative;
+    margin: auto;
+    vertical-align: top;
+    width: 80%;
+    font-weight: bold;
+}
+
+.collapsedBar {
+    display: none;
+}
+
+.visibleBar {
+    visibility: visible;
 }
 
 .btn {
