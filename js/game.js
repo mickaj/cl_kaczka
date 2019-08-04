@@ -1,8 +1,7 @@
 ﻿document.addEventListener("DOMContentLoaded", domLoaded);
 
 function domLoaded() {
-    var startBtn = $('#startBtn');
-    startBtn.click(startBtnClick);    
+    $('#startBtn').click(startBtnClick);    
 }
 
 function moveDuck() {
@@ -14,32 +13,26 @@ function moveDuck() {
 
     duckDiv.click(showExplosion);
 
-    var screenDiv = $('#gameScreen');
-
-    console.log(duckDiv);
-
-    var timeout = setInterval(function () { duckAnimate(duckDiv, screenDiv); }, 1000);
+    var timeout = setInterval(function () { duckAnimate(); }, 1000);
     duckDiv.attr("data-interval", timeout);
     return timeout;
 }
 
-
-function duckAnimate(duckDiv, screenDiv) {
-    if (isDuckOutOfBounds()) {
-        console.log("out of bounds!");
-        resetPosition();
-    }
+function duckAnimate() {
+    if (isDuckOutOfBounds()) resetDuckPosition();
 
     do {
         var direction = randomDirection();
-        var distance = randomDistance();
-        var animationOk = canAnimate(duckDiv, screenDiv, direction, distance);
+        var distance = randomDistance(200);
+        var animationOk = canAnimate(direction, distance);
     } while (!animationOk);
 
-    duckDiv.animate(randomAnimation(direction, distance), 200);
+    $("#duck").animate(randomAnimation(direction, distance), 200);
 }
 
-function canAnimate(duck, screen, direction, distance) {
+function canAnimate(direction, distance) {
+    var duck = $("#duck");
+    var screen = $("#gameScreen");
 
     var trueXdistance = distance;
     var trueYdistance = distance;
@@ -55,69 +48,13 @@ function canAnimate(duck, screen, direction, distance) {
     return true;
 }
 
-function randomAnimation(direction, distance) {
-    var deltaLeft = "+=0px";
-    var deltaTop = "+=0px";
-
-    switch (direction.charAt(0)) {
-        case "N":
-            deltaTop = `-=${distance}`;
-            break;
-        case "S":
-            deltaTop = `+=${distance}`;
-            break;
-    }
-
-    switch (direction.charAt(1)) {
-        case "E":
-            deltaLeft = `+=${distance}`;
-            break;
-        case "W":
-            deltaLeft = `-=${distance}`;
-            break;
-    }
-
-    return {
-        'left': deltaLeft,
-        'top': deltaTop
-    };
-}
-
-function fallDownAnimation(duckDiv, screenDiv) {
-    var deltaTop = screenDiv.prop("offsetHeight") - duckDiv.prop("offsetTop");
-    deltaTop = "+=" + deltaTop;
-
-    duckDiv.animate({ 'top': deltaTop }, 200);
-}
-
-function randomDirection() {
-    var number = Math.floor(Math.random() * 8) + 1;
-    switch (number) {
-        case 1: return "N0";
-        case 2: return "NE";
-        case 3: return "0E";
-        case 4: return "SE";
-        case 5: return "S0";
-        case 6: return "SW";
-        case 7: return "0W";
-        case 8: return "NW";
-    }
-}
-
-function randomDistance() {
-    return Math.floor(Math.random() * 150) + 1;
-}
-
 function showExplosion() {
     var duckDiv = $("#duck");
     var duckEnergy = parseInt(duckDiv.attr("data-energy")) - 5;
-    duckDiv.attr("data-energy", duckEnergy);
 
-    var energyBar = $("#energyBar");
-    energyBar.css("width", duckEnergy * 0.8 + "%");
-    energyBar.text(duckEnergy + "%");
+    updateEnergy(duckEnergy);
 
-    if (duckEnergy <= 0) { killDuck(); }
+    if (duckEnergy <= 0) { stopGame(); }
 
     var explosionDiv = $('#explosion');
     explosionDiv.css("visibility", "visible");
@@ -126,9 +63,61 @@ function showExplosion() {
     }, 200);
 }
 
-function startBtnClick() {
-    resetPosition();
+function updateEnergy(newValue) {
+    $("#duck").attr("data-energy", newValue);
 
+    var energyBar = $("#energyBar");
+    energyBar.css("width", newValue * 0.8 + "%");
+    energyBar.text(newValue + "%");
+}
+
+function startBtnClick() {
+    resetDuckPosition();
+    showNewEnergyBar();
+    moveDuck();
+}
+
+function stopGame() {
+    destroyDuck();
+    fallDownAnimation();
+    showStartButton();
+}
+
+function destroyDuck() {
+    var duckDiv = $("#duck");
+    clearInterval(parseInt(duckDiv.attr("data-interval")));
+    duckDiv.removeClass("notdestroyed");
+    duckDiv.addClass("destroyed");
+    duckDiv.off("click");
+}
+
+function fallDownAnimation() {
+    var duckDiv = $("#duck");
+    var screenDiv = $("#gameScreen");
+
+    var deltaTop = screenDiv.prop("offsetHeight") - duckDiv.prop("offsetTop");
+    deltaTop = "+=" + deltaTop;
+
+    duckDiv.animate({ 'top': deltaTop }, 200);
+}
+
+function resetDuckPosition() {
+    var duckDiv = $("#duck");
+    duckDiv.css("top", "50px");
+    duckDiv.css("left", "50px");
+}
+
+function showStartButton() {
+    var startButton = $("#startBtn");
+    startButton.removeClass("collapsedBar");
+    startButton.addClass("visibleBar");
+
+    var energyBar = $("#energyBar");
+    energyBar.removeClass("visibleBar");
+    energyBar.addClass("collapsedBar");
+}
+
+function showNewEnergyBar() {
     var startButton = $("#startBtn");
     startButton.removeClass("visibleBar");
     startButton.addClass("collapsedBar");
@@ -139,32 +128,6 @@ function startBtnClick() {
 
     energyBar.css("width", "80%");
     energyBar.text("100%");
-
-    moveDuck();
-}
-
-function killDuck() {
-    var duckDiv = $("#duck");
-    var screenDiv = $("#gameScreen");
-    duckDiv.off("click");
-    clearInterval(parseInt(duckDiv.attr("data-interval")));
-    duckDiv.removeClass("notdestroyed");
-    duckDiv.addClass("destroyed");
-    fallDownAnimation(duckDiv, screenDiv);
-
-    var startButton = $("#startBtn");
-    startButton.removeClass("collapsedBar");
-    startButton.addClass("visibleBar");
-
-    var energyBar = $("#energyBar");
-    energyBar.removeClass("visibleBar");
-    energyBar.addClass("collapsedBar");
-}
-
-function resetPosition() {
-    var duckDiv = $("#duck");
-    duckDiv.css("top", "50px");
-    duckDiv.css("left", "50px");
 }
 
 function isDuckOutOfBounds() {
